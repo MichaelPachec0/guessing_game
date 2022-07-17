@@ -159,6 +159,7 @@ fn guess_again() -> bool {
 
 // function that takes nothing, but returns a 64 bit int
 fn initialize() -> i64 {
+    // TODO: set limits
     let mut rng_gen:ThreadRng = thread_rng();
     let answer:i64 = rng_gen.gen();
     println!("{answer}");
