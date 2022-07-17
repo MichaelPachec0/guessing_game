@@ -82,7 +82,8 @@ fn format_input() -> String {
     io::stdin()
         .read_line(&mut ret)
         .expect("Failed to read line");
-    String::from(ret.trim())
+    // String::from(ret.trim())
+    ret.trim().to_string()
 }
 
 // leave all the mutable types in here, so that we can work with immutable data
