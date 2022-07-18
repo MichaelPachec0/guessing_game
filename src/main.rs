@@ -38,7 +38,7 @@ fn game_logic(number: i64) -> bool {
         println!("You guessed: {guess}");
         state = match_number(number, guess);
         guesses += 1;
-        if !state || !guess_again() {
+        if !state {
             break;
         }
 
@@ -141,21 +141,21 @@ fn guess_input() -> i64{
     }
 }
 
-fn guess_again() -> bool {
-    let mut answer:String;
-    println!("Do you wish to try again?[y/n]");
-    loop{
-        answer = format_input();
-        if !answer.is_empty() && answer.len() == 1{
-            // fancy way of returning a match
-            return match answer.as_str() {
-                "y" => true,
-                "n" => false,
-                _ => continue
-            }
-        }
-    }
-}
+// fn guess_again() -> bool {
+//     let mut answer:String;
+//     println!("Do you wish to try again?[y/n]");
+//     loop{
+//         answer = format_input();
+//         if !answer.is_empty() && answer.len() == 1{
+//             // fancy way of returning a match
+//             return match answer.as_str() {
+//                 "y" => true,
+//                 "n" => false,
+//                 _ => continue
+//             }
+//         }
+//     }
+// }
 
 // function that takes nothing, but returns a 64 bit int
 fn initialize() -> i64 {
