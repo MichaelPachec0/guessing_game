@@ -1,10 +1,10 @@
 extern crate core;
 
-use std:: {
+use std::{
     io,
-    cmp::Ordering
+    cmp::Ordering,
+    num::ParseIntError,
 };
-use std::num::ParseIntError;
 use rand::prelude::*;
 
 fn main() {
@@ -105,7 +105,7 @@ fn guess_input() -> i64{
             continue
         }
         // try to parse as a i64
-        let ret:Result<i64, ParseIntError> = guess.parse::<i64>();
+        let ret: Result<i64, ParseIntError> = guess.parse::<i64>();
         return match ret {
             Ok(int) => int,
             Err(_e) => {
