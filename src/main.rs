@@ -4,12 +4,12 @@ use std::{
     io,
     cmp::Ordering,
     num::ParseIntError,
+    env,
 };
 use rand::prelude::*;
 
 fn main() {
     // Grab a random number
-    // TODO: set limits
     // let mut number:i64;
     // loop{
     //     number = initialize();
@@ -17,16 +17,22 @@ fn main() {
     //         break;
     //     }
     // }
-    let mut number:i64 = initialize();
-    while game_logic(number) {
-        number = initialize()
+    // TODO: let the user set their limits
+    let args: Vec<String> = env::Args::collect(env::args());
+    if args.len() < 2 {
+        println!("WE GOT ARGS!");
+    }
+    let mut number: i64 = initialize(None, None, None);
+    while game_logic(&number) {
+        number = initialize(None, None, None);
     }
 }
-fn game_logic(number: i64) -> bool {
-    let mut guesses :i32 = 0;
+
+fn game_logic(number: &i64) -> bool {
+    let mut guesses: i32 = 0;
     let mut state: bool;
-    let mut guess:i64;
-    loop{
+    let mut guess: i64;
+    loop {
 
         // equivalent of a formatted string in python, insert guess into the string
 
@@ -41,17 +47,18 @@ fn game_logic(number: i64) -> bool {
         if !state {
             break;
         }
-
     }
     println!("You guessed the number in {guesses} tries");
     play_again()
 }
-fn match_number(number: i64, guess: i64) -> bool {
-    match guess.cmp(&number) {
-        Ordering::Less=> {
-            println!("You guessed lower than the number"); },
-        Ordering::Greater=> { println!("You guessed higher than the number") },
-        Ordering::Equal=> {
+
+fn match_number(number: &i64, guess: i64) -> bool {
+    match guess.cmp(number) {
+        Ordering::Less => {
+            println!("You guessed lower than the number");
+        }
+        Ordering::Greater => { println!("You guessed higher than the number") }
+        Ordering::Equal => {
             println!("You guessed the number!");
             return false;
         }
@@ -61,7 +68,7 @@ fn match_number(number: i64, guess: i64) -> bool {
 
 
 fn play_again() -> bool {
-    let mut answer:String;
+    let mut answer: String;
     println!("Do you wish to play again?");
     loop {
         answer = format_input();
@@ -71,23 +78,29 @@ fn play_again() -> bool {
                 "y" => true,
                 "n" => false,
                 _ => continue
-            }
+            };
         }
     }
 }
 
 fn format_input() -> String {
-    let mut ret:String = String::new();
-    ret.clear();
+    // from the io crate use the stdin function
+    // pipe into the read_line, which uses the address of the variable we created
+    // guess.
+
+    let mut ret: String = String::new();
     io::stdin()
         .read_line(&mut ret)
         .expect("Failed to read line");
+    // If we fail, then output error message, and then loop again
+
+    // Either or work,
     // String::from(ret.trim())
     ret.trim().to_string()
 }
 
 // leave all the mutable types in here, so that we can work with immutable data
-fn guess_input() -> i64{
+fn guess_input() -> i64 {
     // ret will be a type of result
     // let mut ret:Result<i64,ParseIntError>;
 
@@ -95,26 +108,25 @@ fn guess_input() -> i64{
     println!("Please input your guess or q to quit the game");
 
     loop {
-        // from the io crate use the stdin function
-        // pipe into the read_line, which uses the address of the variable we created
-        // guess.
-        // If we fail, then output error message, and then loop again
-        let guess:String = format_input();
+
+        let guess: String = format_input();
         // skip parsing if we fail to read line
-        if guess.is_empty(){
-            continue
+        if guess.is_empty() {
+            continue;
         }
         // try to parse as a i64
         let ret: Result<i64, ParseIntError> = guess.parse::<i64>();
-        return match ret {
-            Ok(int) => int,
+        match ret {
+            Ok(int) => {
+                return int;
+            },
             Err(_e) => {
-                if guess.eq("q"){
+                if guess.eq("q") {
                     return i64::MAX;
                 }
                 println!("ERR: {_e}, guess: {guess}");
                 continue;
-            },
+            }
         }
         // More idiomatic rust
         // if let Ok(int_ret) = ret {
