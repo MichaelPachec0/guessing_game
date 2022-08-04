@@ -169,11 +169,26 @@ fn guess_input() -> i64 {
 //     }
 // }
 
-// function that takes nothing, but returns a 64 bit int
-fn initialize() -> i64 {
-    // TODO: set limits
-    let mut rng_gen:ThreadRng = thread_rng();
-    let answer:i64 = rng_gen.gen();
-    println!("{answer}");
+
+fn initialize(_min: Option<i64>, _max: Option<i64>, _debug: Option<bool>) -> i64 {
+    // TODO: Let user set limits
+    // clippy at its most opinionated doesnt like this, i prefer this since the next match would
+    //  would follow the same logic.
+    //     let max = match _max {
+    //         Some(tmp) => tmp,
+    //         None => 100,
+    //     };
+    let max: i64 = _max.unwrap_or(100);
+    let min: i64 = match _min {
+        Some(_tmp) if _tmp < max => _tmp,
+        _ => 0,
+    };
+
+    let debug: bool = _debug.unwrap_or(false);
+    let mut rng_gen: ThreadRng = thread_rng();
+    let answer: i64 = rng_gen.gen_range(min..max);
+    if debug {
+        println!("{answer}");
+    }
     answer
 }
